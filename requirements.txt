@@ -2,6 +2,7 @@ spidev
 Pillow
 numpy
 RPi.GPIO
+gpiozero
 
 # Development dependencies
 -e .  # This assumes your project is in the current directory
