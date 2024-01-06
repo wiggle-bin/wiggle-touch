@@ -1,6 +1,5 @@
 from wiggle_touch.lib import LCD_2inch
 from PIL import Image
-from pathlib import Path
 from RPi import GPIO
 import logging
 

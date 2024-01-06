@@ -1,45 +1,38 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 # import chardet
-import os
 import sys
-import spidev as SPI
-from pathlib import Path
 from threading import Event
 from gpiozero import RotaryEncoder
-
 sys.path.append("..")
+from wiggle_touch.images import Images
 from wiggle_touch.display import Display
 import logging
 
 logging.basicConfig(level=logging.CRITICAL)
 
-# Paths
-BASE_FOLDER = Path.home() / "WiggleR"
-IMG_FOLDER = BASE_FOLDER / "Pictures"
-
-
 def main():
     try:
-        files = sorted(os.listdir(IMG_FOLDER))
-        imageCount = len(files) - 1
+        images = Images()
         display = Display()
 
         # Show most recent image on startup
-        display.show_image(IMG_FOLDER / files[imageCount])
+        display.show_image(images.last)
 
         # Listen to rotary
-        rotor = RotaryEncoder(17, 23, wrap=True, max_steps=imageCount)
+        rotor = RotaryEncoder(17, 23, wrap=True, max_steps=images.count)
         done = Event()
 
         def change_image():
-            index = imageCount + rotor.steps if rotor.steps < 0 else rotor.steps
-            display.show_image(IMG_FOLDER / files[index])
+            index = images.count + rotor.steps if rotor.steps < 0 else rotor.steps
+            display.show_image(images[index])
 
         print("Select a image by turning the knob")
         rotor.when_rotated = change_image
 
         done.wait()
+
+        # Display clean up
         display.clean_up()
         display.exit()
     except IOError as e:
