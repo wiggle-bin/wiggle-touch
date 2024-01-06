@@ -3,64 +3,50 @@
 # import chardet
 import os
 import sys
-import logging
 import spidev as SPI
 from pathlib import Path
 from threading import Event
 from gpiozero import RotaryEncoder
+
 sys.path.append("..")
-from wiggle_touch.lib import LCD_2inch
-from PIL import Image
-from RPi import GPIO
+from wiggle_touch.display import Display
+import logging
 
-# Pin configuration for LCD screen
-RST = 27
-DC = 25
-BL = 18
-bus = 0
-device = 0
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.CRITICAL)
 
-# Collect images
-BASE_FOLDER = Path.home() / 'WiggleR'
+# Paths
+BASE_FOLDER = Path.home() / "WiggleR"
 IMG_FOLDER = BASE_FOLDER / "Pictures"
 
-def list_files(folder):
-    return sorted(os.listdir(folder))
 
-files = list_files(IMG_FOLDER)
-
-imageCount = len(files) - 1
-
-# Setup display
-disp = LCD_2inch.LCD_2inch()
-disp.Init()
-disp.clear()
-
-def show_image(index):
-    print(f'Show image at index {index} with name {files[index]}')
+def main():
     try:
-        with Image.open(IMG_FOLDER / files[index]) as image:
-            disp.ShowImage(image.resize((320, 240)).rotate(180))
-    except Exception as e:
-        print(f"Unable to open image {files[index]}.")
-        print(f"Error details: {str(e)}")
+        files = sorted(os.listdir(IMG_FOLDER))
+        imageCount = len(files) - 1
+        display = Display()
 
-# Show most recent image on startup
-show_image(imageCount)
+        # Show most recent image on startup
+        display.show_image(IMG_FOLDER / files[imageCount])
 
-# Listen to rotary
-rotor = RotaryEncoder(17, 23, wrap=True, max_steps=imageCount)
-done = Event()
+        # Listen to rotary
+        rotor = RotaryEncoder(17, 23, wrap=True, max_steps=imageCount)
+        done = Event()
 
-def change_image():
-    index = imageCount + rotor.steps if rotor.steps < 0 else rotor.steps
-    show_image(index)
+        def change_image():
+            index = imageCount + rotor.steps if rotor.steps < 0 else rotor.steps
+            display.show_image(IMG_FOLDER / files[index])
 
-print('Select a image by turning the knob')
-rotor.when_rotated = change_image
+        print("Select a image by turning the knob")
+        rotor.when_rotated = change_image
 
-done.wait()
+        done.wait()
+        display.clean_up()
+        display.exit()
+    except IOError as e:
+        print(e)
+    except KeyboardInterrupt:
+        display.exit()
 
-GPIO.cleanup()
-disp.module_exit()
+
+if __name__ == "__main__":
+    main()
