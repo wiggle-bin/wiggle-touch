@@ -4,12 +4,14 @@
 import sys
 from threading import Event
 from gpiozero import RotaryEncoder
+
 sys.path.append("..")
 from wiggle_touch.images import Images
 from wiggle_touch.display import Display
 import logging
 
 logging.basicConfig(level=logging.CRITICAL)
+
 
 def main():
     try:
