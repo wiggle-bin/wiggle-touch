@@ -23,20 +23,9 @@ class Display:
         disp.Init()
         disp.clear()
 
-        self.image = Image.new("RGB", (disp.height, disp.width), "BLACK")
-        self.draw = ImageDraw.Draw(self.image)
-        self.font = ImageFont.truetype(
-            os.path.dirname(__file__) + "/font/pixel_arial_11.ttf", 14
-        )
-
         self.disp = disp
         self.height = disp.height
         self.width = disp.width
-
-    def blank(self):
-        self.draw.rectangle(
-            (-1, -1, self.disp.height + 1, self.disp.width + 1), outline=0, fill="BLACK"
-        )
 
     def show_image(self, path):
         print(f"Show image {path}")
@@ -45,16 +34,6 @@ class Display:
                 self.disp.ShowImage(image.resize((320, 240)).rotate(180))
         except Exception as e:
             print(f"Unable to open image {path}.")
-            print(f"Error details: {str(e)}")
-
-    def show_menu_item(self, display_text):
-        print(f"Show menu item")
-        try:
-            self.blank()
-            self.draw.text((3, 10), display_text, font=self.font, fill="WHITE")
-            self.disp.ShowImage(self.image)
-        except Exception as e:
-            print(f"Unable to show menu item.")
             print(f"Error details: {str(e)}")
 
     def clean_up(self):
