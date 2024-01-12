@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 # import chardet
 
+import os
 from wiggle_touch.menu import Menu, MenuAction, MenuParent
 from threading import Event
 from gpiozero import RotaryEncoder, Button
@@ -12,36 +13,18 @@ def main():
         btn = Button(2)
         menu = Menu(
             [
-                MenuAction("First line", lambda: print("First line")),
-                MenuAction("A second menu option", lambda: print("Second line")),
                 MenuParent(
-                    "Now to the third",
+                    "Record",
                     [
                         MenuAction(
-                            "First sub-option", lambda: print("First sub-option")
+                            "Start", lambda: os.system('wiggler --recording start')
                         ),
                         MenuAction(
-                            "Second sub-option", lambda: print("Second sub-option")
-                        ),
-                        MenuParent(
-                            "Third sub-option",
-                            [
-                                MenuAction(
-                                    "First sub-sub-option",
-                                    lambda: print("First sub-sub-option"),
-                                ),
-                                MenuAction(
-                                    "Second sub-sub-option",
-                                    lambda: print("Second sub-sub-option"),
-                                ),
-                            ],
-                        ),
-                        MenuAction(
-                            "Fourth sub-option", lambda: print("Fourth sub-option")
-                        ),
+                            "Stop", lambda: os.system('wiggler --recording stop')
+                        )
                     ],
                 ),
-                MenuAction("On to the forth", lambda: print("Fourth option")),
+                MenuAction("On to the forth", lambda: print("Forth option")),
                 MenuAction("Follow the fifth", lambda: print("Fifth option")),
                 MenuAction("Support the sixth", lambda: print("Sixth option")),
             ]
