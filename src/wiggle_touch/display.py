@@ -30,6 +30,8 @@ class Display:
         )
 
         self.disp = disp
+        self.height = disp.height
+        self.width = disp.width
 
     def blank(self):
         self.draw.rectangle(
