@@ -112,9 +112,9 @@ class Menu:
             fill = "WHITE"
             if self.highlight_option is not None and self.highlight_option == x:
                 self.draw.rectangle(
-                    [0, top, self.display.width, top + 11], outline=0, fill=1
+                    [0, top, self.display.height, top + 18], outline=0, fill="BLUE"
                 )
-                fill = "BLUE"
+                fill = "WHITE"
 
             if type(options[x]) is MenuParent:
                 display_text = f"{options[x].text} {'>'*20}"
