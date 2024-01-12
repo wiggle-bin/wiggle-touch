@@ -66,7 +66,7 @@ def main():
         print("Select a menu item by turning the knob")
         rotor.when_rotated_clockwise = change_menu_down
         rotor.when_rotated_counter_clockwise = change_menu_up
-        btn.when_pressed = select_menu_item
+        btn.when_released = select_menu_item
 
         done.wait()
 
