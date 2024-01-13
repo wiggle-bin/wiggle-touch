@@ -46,4 +46,3 @@ class Images:
             self.selected = self.selected - 1
 
         return self[self.selected]
-        

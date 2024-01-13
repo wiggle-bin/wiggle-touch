@@ -2,6 +2,7 @@ import os
 from wiggle_touch import screen_images
 from wiggle_touch.data_menu import Menu, MenuAction, MenuParent
 
+
 def show(btn, rotor, display):
     def reset_listeners():
         rotor.when_rotated_clockwise = None
@@ -17,17 +18,13 @@ def show(btn, rotor, display):
             MenuParent(
                 "Record",
                 [
-                    MenuAction(
-                        "Start", lambda: os.system('wiggler --recording start')
-                    ),
-                    MenuAction(
-                        "Stop", lambda: os.system('wiggler --recording stop')
-                    )
+                    MenuAction("Start", lambda: os.system("wiggler --recording start")),
+                    MenuAction("Stop", lambda: os.system("wiggler --recording stop")),
                 ],
             ),
             MenuAction("Images", lambda: show_images()),
         ],
-        display
+        display,
     )
 
     menu.render()

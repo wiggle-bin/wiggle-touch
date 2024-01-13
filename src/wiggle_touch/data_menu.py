@@ -20,7 +20,9 @@ class MenuParent:
 
 
 class Menu:
-    def __init__(self, options: list[Union[MenuParent, MenuAction]] = None, display = None):
+    def __init__(
+        self, options: list[Union[MenuParent, MenuAction]] = None, display=None
+    ):
         if options is None:
             options = []
         self.options = options

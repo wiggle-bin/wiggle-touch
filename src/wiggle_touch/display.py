@@ -6,6 +6,7 @@ from PIL import Image
 
 logging.basicConfig(level=logging.CRITICAL)
 
+
 class Display:
     """Handle display interactions."""
 

@@ -1,7 +1,6 @@
-
-
 from wiggle_touch import screen_menu
 from wiggle_touch.data_images import Images
+
 
 def show(btn, rotor, display):
     def reset_listeners():
