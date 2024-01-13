@@ -10,24 +10,29 @@ from threading import Event
 from gpiozero import RotaryEncoder, Button
 
 def display_images(btn, rotor, display):
+    def reset_listeners():
+        rotor.when_rotated_clockwise = None
+        rotor.when_rotated_counter_clockwise = None
+        btn.when_released = None
+
+    def back_to_menu():
+        reset_listeners()
+        display_menu(btn, rotor, display)
+
     images = Images()
 
     # Show most recent image on startup
     display.show_image(images.last)
 
-    def change_image():
-        print(rotor.steps)
-        index = images.count + rotor.steps if rotor.steps < 0 else rotor.steps
-        display.show_image(images[index])
+    def next_image():
+        display.show_image(images.next())
+
+    def prev_image():
+        display.show_image(images.prev())
 
     print("Select a image by turning the knob")
-    rotor.when_rotated = change_image
-
-    def back_to_menu():
-        rotor.when_rotated = None
-        btn.when_released = None
-        display_menu(btn, rotor, display)
-
+    rotor.when_rotated_clockwise = next_image
+    rotor.when_rotated_counter_clockwise = prev_image
     btn.when_released = back_to_menu
 
 def display_menu(btn, rotor, display):

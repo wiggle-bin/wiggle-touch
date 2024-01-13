@@ -3,6 +3,7 @@ Pillow
 numpy
 RPi.GPIO
 gpiozero==1.6.2
+crontab
 
 # Development dependencies
 -e .  # This assumes your project is in the current directory
