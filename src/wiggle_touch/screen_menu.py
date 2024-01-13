@@ -1,49 +1,16 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-# import chardet
-
 import os
-from wiggle_touch.display import Display
-from wiggle_touch.images import Images
-from wiggle_touch.menu import Menu, MenuAction, MenuParent
-from threading import Event
-from gpiozero import RotaryEncoder, Button
+from wiggle_touch import screen_images
+from wiggle_touch.data_menu import Menu, MenuAction, MenuParent
 
-def display_images(btn, rotor, display):
+def show(btn, rotor, display):
     def reset_listeners():
         rotor.when_rotated_clockwise = None
         rotor.when_rotated_counter_clockwise = None
         btn.when_released = None
 
-    def back_to_menu():
+    def show_images():
         reset_listeners()
-        display_menu(btn, rotor, display)
-
-    images = Images()
-
-    # Show most recent image on startup
-    display.show_image(images.last)
-
-    def next_image():
-        display.show_image(images.next())
-
-    def prev_image():
-        display.show_image(images.prev())
-
-    print("Select a image by turning the knob")
-    rotor.when_rotated_clockwise = next_image
-    rotor.when_rotated_counter_clockwise = prev_image
-    btn.when_released = back_to_menu
-
-def display_menu(btn, rotor, display):
-    def reset_listeners():
-        rotor.when_rotated_clockwise = None
-        rotor.when_rotated_counter_clockwise = None
-        btn.when_released = None
-
-    def show_display():
-        reset_listeners()
-        display_images(btn, rotor, display)
+        screen_images.show(btn, rotor, display)
 
     menu = Menu(
         [
@@ -58,7 +25,7 @@ def display_menu(btn, rotor, display):
                     )
                 ],
             ),
-            MenuAction("Images", lambda: show_display()),
+            MenuAction("Images", lambda: show_images()),
         ],
         display
     )
@@ -80,24 +47,3 @@ def display_menu(btn, rotor, display):
     rotor.when_rotated_clockwise = change_menu_down
     rotor.when_rotated_counter_clockwise = change_menu_up
     btn.when_released = select_menu_item
-
-def main():
-    try:
-        btn = Button(2)
-        rotor = RotaryEncoder(17, 23)
-        display = Display()
-        
-        done = Event()
-        display_menu(btn, rotor, display)
-        done.wait()
-
-        display.clean_up()
-        display.exit()
-    except IOError as e:
-        print(e)
-    except KeyboardInterrupt:
-        display.exit()
-
-
-if __name__ == "__main__":
-    main()

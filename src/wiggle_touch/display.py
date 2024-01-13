@@ -1,19 +1,10 @@
-import os
 from wiggle_touch.lib import LCD_2inch
 from PIL import Image
 from RPi import GPIO
 import logging
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 logging.basicConfig(level=logging.CRITICAL)
-
-# Pin configuration for LCD screen
-# RST = 27
-# DC = 25
-# BL = 18
-# bus = 0
-# device = 0
-
 
 class Display:
     """Handle display interactions."""

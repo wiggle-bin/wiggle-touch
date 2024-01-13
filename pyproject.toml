@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.scripts]
-wiggle_touch = "wiggle_touch.screen:main"
+wiggle_touch = "wiggle_touch.main:main"
 
 [project.urls]
 "Homepage" = "https://github.com/wiggle-bin/wiggle-touch.git"

@@ -1,47 +1,30 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-# import chardet
-import sys
-from threading import Event
-from gpiozero import RotaryEncoder
-
-sys.path.append("..")
-from wiggle_touch.images import Images
-from wiggle_touch.display import Display
-import logging
-
-logging.basicConfig(level=logging.CRITICAL)
 
 
-def main():
-    try:
-        images = Images()
-        display = Display()
+from wiggle_touch import screen_menu
+from wiggle_touch.data_images import Images
 
-        # Show most recent image on startup
-        display.show_image(images.last)
+def show(btn, rotor, display):
+    def reset_listeners():
+        rotor.when_rotated_clockwise = None
+        rotor.when_rotated_counter_clockwise = None
+        btn.when_released = None
 
-        # Listen to rotary
-        rotor = RotaryEncoder(17, 23, wrap=True, max_steps=images.count)
-        done = Event()
+    def show_menu():
+        reset_listeners()
+        screen_menu.show(btn, rotor, display)
 
-        def change_image():
-            index = images.count + rotor.steps if rotor.steps < 0 else rotor.steps
-            display.show_image(images[index])
+    images = Images()
 
-        print("Select a image by turning the knob")
-        rotor.when_rotated = change_image
+    # Show most recent image on startup
+    display.show_image(images.last)
 
-        done.wait()
+    def next_image():
+        display.show_image(images.next())
 
-        # Display clean up
-        display.clean_up()
-        display.exit()
-    except IOError as e:
-        print(e)
-    except KeyboardInterrupt:
-        display.exit()
+    def prev_image():
+        display.show_image(images.prev())
 
-
-if __name__ == "__main__":
-    main()
+    print("Select a image by turning the knob")
+    rotor.when_rotated_clockwise = next_image
+    rotor.when_rotated_counter_clockwise = prev_image
+    btn.when_released = show_menu

@@ -2,7 +2,6 @@ from copy import deepcopy
 import os
 import threading
 from typing import Union
-from wiggle_touch.display import Display
 from PIL import Image
 from PIL import Image, ImageDraw, ImageFont
 from dataclasses import dataclass, field
