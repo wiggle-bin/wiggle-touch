@@ -21,7 +21,7 @@ class MenuParent:
 
 
 class Menu:
-    def __init__(self, options: list[Union[MenuParent, MenuAction]] = None):
+    def __init__(self, options: list[Union[MenuParent, MenuAction]] = None, display = None):
         if options is None:
             options = []
         self.options = options
@@ -29,7 +29,7 @@ class Menu:
         self.current_menu_level = [(None, self.options)]
         self.row_count = 5
 
-        self.display = Display()
+        self.display = display
         self.image = Image.new(
             "RGB", (self.display.height, self.display.width), "BLACK"
         )

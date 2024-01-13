@@ -3,62 +3,95 @@
 # import chardet
 
 import os
+from wiggle_touch.display import Display
+from wiggle_touch.images import Images
 from wiggle_touch.menu import Menu, MenuAction, MenuParent
 from threading import Event
 from gpiozero import RotaryEncoder, Button
 
+def display_images(btn, rotor, display):
+    images = Images()
+
+    # Show most recent image on startup
+    display.show_image(images.last)
+
+    def change_image():
+        print(rotor.steps)
+        index = images.count + rotor.steps if rotor.steps < 0 else rotor.steps
+        display.show_image(images[index])
+
+    print("Select a image by turning the knob")
+    rotor.when_rotated = change_image
+
+    def back_to_menu():
+        rotor.when_rotated = None
+        btn.when_released = None
+        display_menu(btn, rotor, display)
+
+    btn.when_released = back_to_menu
+
+def display_menu(btn, rotor, display):
+    def reset_listeners():
+        rotor.when_rotated_clockwise = None
+        rotor.when_rotated_counter_clockwise = None
+        btn.when_released = None
+
+    def show_display():
+        reset_listeners()
+        display_images(btn, rotor, display)
+
+    menu = Menu(
+        [
+            MenuParent(
+                "Record",
+                [
+                    MenuAction(
+                        "Start", lambda: os.system('wiggler --recording start')
+                    ),
+                    MenuAction(
+                        "Stop", lambda: os.system('wiggler --recording stop')
+                    )
+                ],
+            ),
+            MenuAction("Images", lambda: show_display()),
+        ],
+        display
+    )
+
+    menu.render()
+
+    def change_menu_down():
+        menu.change_highlight(1)
+        menu.render()
+
+    def change_menu_up():
+        menu.change_highlight(-1)
+        menu.render()
+
+    def select_menu_item():
+        menu.perform_current_action()
+
+    print("Select a menu item by turning the knob")
+    rotor.when_rotated_clockwise = change_menu_down
+    rotor.when_rotated_counter_clockwise = change_menu_up
+    btn.when_released = select_menu_item
 
 def main():
     try:
         btn = Button(2)
-        menu = Menu(
-            [
-                MenuParent(
-                    "Record",
-                    [
-                        MenuAction(
-                            "Start", lambda: os.system('wiggler --recording start')
-                        ),
-                        MenuAction(
-                            "Stop", lambda: os.system('wiggler --recording stop')
-                        )
-                    ],
-                ),
-                MenuAction("On to the forth", lambda: print("Forth option")),
-                MenuAction("Follow the fifth", lambda: print("Fifth option")),
-                MenuAction("Support the sixth", lambda: print("Sixth option")),
-            ]
-        )
-
-        menu.render()
-
         rotor = RotaryEncoder(17, 23)
+        display = Display()
+        
         done = Event()
-
-        def change_menu_down():
-            menu.change_highlight(1)
-            menu.render()
-
-        def change_menu_up():
-            menu.change_highlight(-1)
-            menu.render()
-
-        def select_menu_item():
-            menu.perform_current_action()
-
-        print("Select a menu item by turning the knob")
-        rotor.when_rotated_clockwise = change_menu_down
-        rotor.when_rotated_counter_clockwise = change_menu_up
-        btn.when_released = select_menu_item
-
+        display_menu(btn, rotor, display)
         done.wait()
 
-        menu.display.clean_up()
-        menu.display.exit()
+        display.clean_up()
+        display.exit()
     except IOError as e:
         print(e)
     except KeyboardInterrupt:
-        menu.display.exit()
+        display.exit()
 
 
 if __name__ == "__main__":
