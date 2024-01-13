@@ -22,6 +22,13 @@ def show(btn, rotor, display):
                     MenuAction("Stop", lambda: os.system("wiggler --recording stop")),
                 ],
             ),
+            MenuParent(
+                "Light",
+                [
+                    MenuAction("On", lambda: os.system("sudo wiggler --light")),
+                    MenuAction("Off", lambda: os.system("sudo wiggler --light-off")),
+                ],
+            ),
             MenuAction("Images", lambda: show_images()),
         ],
         display,
