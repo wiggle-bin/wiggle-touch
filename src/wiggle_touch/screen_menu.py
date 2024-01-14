@@ -18,8 +18,15 @@ def show(btn, rotor, display):
             MenuParent(
                 "Record",
                 [
-                    MenuAction("Start", lambda: os.system("wiggler --recording start")),
-                    MenuAction("Stop", lambda: os.system("wiggler --recording stop")),
+                    MenuAction("On", lambda: os.system("wiggler --recording start")),
+                    MenuAction("Off", lambda: os.system("wiggler --recording stop")),
+                ],
+            ),
+            MenuParent(
+                "Experiment",
+                [
+                    MenuAction("Start", lambda: os.system("wiggler --experiment start")),
+                    MenuAction("Stop", lambda: os.system("wiggler --experiment stop")),
                 ],
             ),
             MenuParent(
