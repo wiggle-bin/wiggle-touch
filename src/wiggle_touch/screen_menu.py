@@ -1,5 +1,5 @@
 import os
-from wiggle_touch import screen_images
+from wiggle_touch import screen_images, screen_live
 from wiggle_touch.data_menu import Menu, MenuAction, MenuParent
 
 
@@ -13,19 +13,25 @@ def show(btn, rotor, display):
         reset_listeners()
         screen_images.show(btn, rotor, display)
 
+    def show_live():
+        reset_listeners()
+        screen_live.show(btn, rotor, display)
+
     menu = Menu(
         [
             MenuParent(
                 "Record",
                 [
-                    MenuAction("On", lambda: os.system("wiggler --recording start")),
+                    MenuAction("On", os.system("wiggler --recording start")),
                     MenuAction("Off", lambda: os.system("wiggler --recording stop")),
                 ],
             ),
             MenuParent(
                 "Experiment",
                 [
-                    MenuAction("Start", lambda: os.system("wiggler --experiment start")),
+                    MenuAction(
+                        "Start", lambda: os.system("wiggler --experiment start")
+                    ),
                     MenuAction("Stop", lambda: os.system("wiggler --experiment stop")),
                 ],
             ),
@@ -36,7 +42,13 @@ def show(btn, rotor, display):
                     MenuAction("Off", lambda: os.system("sudo wiggler --light-off")),
                 ],
             ),
-            MenuAction("Images", lambda: show_images()),
+            MenuParent(
+                "Images",
+                [
+                    MenuAction("Scroll", lambda: show_images()),
+                    MenuAction("Live", lambda: show_live()),
+                ],
+            ),
         ],
         display,
     )
