@@ -28,6 +28,10 @@ class Display:
             print(f"Unable to open image {path}.")
             print(f"Error details: {str(e)}")
 
+    def clear(self):
+        empty_image = Image.new('RGB', (self.width, self.height))
+        self.disp.ShowImage(empty_image)
+
     def clean_up(self):
         GPIO.cleanup()
 

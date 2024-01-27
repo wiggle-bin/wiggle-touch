@@ -19,7 +19,8 @@ dependencies = [
   'spidev',
   'Pillow',
   'numpy',
-  'watchdog'
+  'watchdog',
+  'picamera'
 ]
 
 [project.scripts]
