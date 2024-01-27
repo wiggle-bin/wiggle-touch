@@ -18,11 +18,13 @@ classifiers = [
 dependencies = [
   'spidev',
   'Pillow',
-  'numpy'
+  'numpy',
+  'watchdog'
 ]
 
 [project.scripts]
 wiggle_touch = "wiggle_touch.main:main"
+wiggle_touch_install = "wiggle_touch.install:install"
 
 [project.urls]
 "Homepage" = "https://github.com/wiggle-bin/wiggle-touch.git"
