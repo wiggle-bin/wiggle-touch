@@ -3,12 +3,12 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "touch_wigglebin"
+name = "wiggle_touch"
 version = "0.0.1"
 authors = [
   { name="Studio Rabota" },
 ]
-description = "WiggleTouch - Analog interface for WiggleR"
+description = "WiggleTouch - Analog interface for WiggleBin"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -24,8 +24,8 @@ dependencies = [
 ]
 
 [project.scripts]
-wiggle_touch = "wiggle_touch.main:main"
-wiggle_touch_install = "wiggle_touch.install:install"
+wiggle-touch = "wiggle_touch.main:main"
+wiggle-touch-install = "wiggle_touch.install:install"
 
 [project.urls]
 "Homepage" = "https://github.com/wiggle-bin/wiggle-touch.git"

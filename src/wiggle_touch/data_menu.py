@@ -11,14 +11,14 @@ from dataclasses import dataclass, field
 class MenuAction:
     text: str
     action: callable = None
-
+    state: str = ""
 
 @dataclass
 class MenuParent:
     text: str
     actions: list[MenuAction] = field(default_factory=list)
 
-
+# Should listen to setting.json file
 class Menu:
     def __init__(
         self, options: list[Union[MenuParent, MenuAction]] = None, display=None
@@ -63,6 +63,10 @@ class Menu:
             self.highlight_option = len(options) - 1
         else:
             self.highlight_option = highlight
+
+    def update_options(self, options):
+        self.options = options
+        self.current_menu_level = [(None, options)]
 
     def perform_current_action(self):
         if self.highlight_option is None:
@@ -120,7 +124,10 @@ class Menu:
             if type(options[x]) is MenuParent:
                 display_text = f"{options[x].text} {'>'*20}"
             else:
-                display_text = options[x].text
+                if (options[x].state != ""):
+                    display_text = f"{options[x].text} ({options[x].state})"
+                else:
+                    display_text = options[x].text
 
             self.draw.text((3, top + 1), display_text, font=self.font, fill=fill)
             top += 18

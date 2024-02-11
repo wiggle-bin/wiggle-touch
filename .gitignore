@@ -10,7 +10,7 @@ venv/
 env/
 
 # Package
-touch_wigglebin.egg-info
+*.egg-info
 
 # macOS system files
 .DS_Store

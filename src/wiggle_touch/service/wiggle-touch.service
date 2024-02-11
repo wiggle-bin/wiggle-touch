@@ -3,7 +3,7 @@ Description=WiggleTouch service
 
 [Service]
 WorkingDirectory=%h
-ExecStart=/bin/bash /usr/bin/wiggle_touch_boot.sh
+ExecStart=/bin/bash /usr/bin/wiggle-touch-boot.sh
 
 [Install]
 WantedBy=default.target

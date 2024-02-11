@@ -12,7 +12,7 @@ IMG_FOLDER = BASE_FOLDER / "Pictures"
 def picture(display):
     display.clear()
     
-    os.system("wiggler --picture")
+    os.system("wiggle-camera --picture")
 
     images = Images()
     display.show_image(images.last)
