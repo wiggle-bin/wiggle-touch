@@ -1,13 +1,13 @@
 import os
 from pathlib import Path
 
-BOOTH_FILE = 'wiggle_touch_boot.sh'
-SERVICE_FILE = 'wiggle_touch.service'
+BOOTH_FILE = 'wiggle-touch-boot.sh'
+SERVICE_FILE = 'wiggle-touch.service'
 
 def install():
-    scriptFile = Path(__file__).parent / f"service/{BOOTH_FILE}"
-    serviceFile = Path(__file__).parent / f"service/{SERVICE_FILE}"
+    scriptFile = Path(__file__).parent / "service" / BOOTH_FILE
+    serviceFile = Path(__file__).parent / "service" / SERVICE_FILE
     os.system(f'sudo cp {scriptFile} /usr/bin/{BOOTH_FILE}')
     os.system(f'sudo cp {serviceFile} /etc/systemd/user/{SERVICE_FILE}')
-    os.system('systemctl --user enable {SERVICE_FILE}')
-    os.system('systemctl --user start {SERVICE_FILE}')
+    os.system(f'systemctl --user enable {SERVICE_FILE}')
+    os.system(f'systemctl --user start {SERVICE_FILE}')
