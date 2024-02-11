@@ -6,6 +6,8 @@ from PIL import Image
 
 logging.basicConfig(level=logging.CRITICAL)
 
+def is_grayscale(img):
+    return img.mode in ('L', '1', 'I;16')
 
 class Display:
     """Handle display interactions."""
@@ -23,6 +25,8 @@ class Display:
         print(f"Show image {path}")
         try:
             with Image.open(path) as image:
+                if is_grayscale(image):
+                    image = image.convert('RGB')
                 self.disp.ShowImage(image.resize((320, 240)).rotate(180))
         except Exception as e:
             print(f"Unable to open image {path}.")
