@@ -45,13 +45,15 @@ def show(btn, rotor, display):
             MenuAction("Picture", show_picture),
             MenuAction("Tag", lambda: os.system("wiggle --tag")),
             MenuAction("Light", toggle_light, settings['light']),
+            MenuAction("Images", lambda: show_images()),
+            MenuAction("Live", lambda: show_live()),
             MenuParent(
-                "Images",
+                "Settings",
                 [
-                    MenuAction("Scroll", lambda: show_images()),
-                    MenuAction("Live", lambda: show_live()),
+                    MenuAction("Light color", lambda: print("... to be implemented")),
+                    MenuAction("Image mode", lambda: print("... to be implemented")),
                 ],
-            ),
+            )
         ]
     
     menu_list = action_list()

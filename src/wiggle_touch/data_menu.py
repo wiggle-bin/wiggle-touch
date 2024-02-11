@@ -5,7 +5,7 @@ from typing import Union
 from PIL import Image
 from PIL import Image, ImageDraw, ImageFont
 from dataclasses import dataclass, field
-
+import math
 
 @dataclass
 class MenuAction:
@@ -28,22 +28,24 @@ class Menu:
         self.options = options
         self.highlight_option = None
         self.current_menu_level = [(None, self.options)]
-        self.row_count = 5
+        self.row_count = 8
 
         self.display = display
         self.image = Image.new(
-            "RGB", (self.display.height, self.display.width), "BLACK"
+            "RGB", (self.display.width, self.display.height), "BLACK"
         )
+        print(self.display.width, self.display.height)
+        self.row_height = math.floor(self.display.height / self.row_count)
         self.draw = ImageDraw.Draw(self.image)
         self.font = ImageFont.truetype(
-            os.path.dirname(__file__) + "/font/pixel_arial_11.ttf", 14
+            os.path.dirname(__file__) + "/font/pixel_arial_11.ttf", 18
         )
 
         self.render_thread = None
 
     def blank(self):
         self.draw.rectangle(
-            (-1, -1, self.display.height + 1, self.display.width + 1),
+            (-1, -1, self.display.width + 1, self.display.height + 1),
             outline=0,
             fill="BLACK",
         )
@@ -117,12 +119,12 @@ class Menu:
             fill = "WHITE"
             if self.highlight_option is not None and self.highlight_option == x:
                 self.draw.rectangle(
-                    [0, top, self.display.height, top + 18], outline=0, fill="BLUE"
+                    [0, top, self.display.width, top + self.row_height], outline=0, fill="BLUE"
                 )
                 fill = "WHITE"
 
             if type(options[x]) is MenuParent:
-                display_text = f"{options[x].text} {'>'*20}"
+                display_text = f"{options[x].text} {'>'*self.row_height}"
             else:
                 if (options[x].state != ""):
                     display_text = f"{options[x].text} ({options[x].state})"
@@ -130,7 +132,7 @@ class Menu:
                     display_text = options[x].text
 
             self.draw.text((3, top + 1), display_text, font=self.font, fill=fill)
-            top += 18
+            top += self.row_height
 
     def __back(self):
         if len(self.current_menu_level) > 1:
@@ -143,5 +145,5 @@ class Menu:
         if type(options) is MenuParent:
             options = options.actions
         if len(self.current_menu_level) > 1:
-            options.insert(0, MenuAction(f"Back {'<'*20}", lambda: self.__back()))
+            options.insert(0, MenuAction(f"Back {'<'*self.row_height}", lambda: self.__back()))
         return options

@@ -18,8 +18,8 @@ class Display:
         disp.clear()
 
         self.disp = disp
-        self.height = disp.height
-        self.width = disp.width
+        self.height = disp.width
+        self.width = disp.height
 
     def show_image(self, path):
         print(f"Show image {path}")
