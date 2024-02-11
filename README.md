@@ -3,29 +3,29 @@
 
 ## Start WiggleTouch on boot of RPI
 
-In the terminal run `wiggle_touch_install`. This will install and start a service which runs `wiggle_touch` on boot.
+In the terminal run `wiggle-touch-install`. This will install and start a service which runs `wiggle-touch` on boot.
 
 ```
-wiggle_touch_install
+wiggle-touch-install
 ```
 
 
 You can check the status with:
 
 ```
-systemctl --user status wiggle_touch.service
+systemctl --user status wiggle-touch.service
 ```
 
 To stop the service run:
 
 ```
-systemctl --user stop wiggle_touch.service
+systemctl --user stop wiggle-touch.service
 ```
 
 To start the service run:
 
 ```
-systemctl --user start wiggle_touch.service
+systemctl --user start wiggle-touch.service
 ```
 
 ## Installation for development
