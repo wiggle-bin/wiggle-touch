@@ -8,6 +8,7 @@ def show(btn, rotor, display):
         rotor.when_rotated_clockwise = None
         rotor.when_rotated_counter_clockwise = None
         btn.when_released = None
+        observer.stop()
 
     def show_images():
         reset_listeners()
@@ -87,4 +88,4 @@ def show(btn, rotor, display):
     btn.when_released = select_menu_item
 
     # listen to setting changes and update the menu
-    monitor_settings_file(update_menu_settings)
+    observer = monitor_settings_file(update_menu_settings)
